@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "recipe-job.fullname" . }}
+  labels:
+    {{- include "recipe-job.labels" . | nindent 4 }}
+spec:
+  clusterIP: None # clusterIP must be None to create a headless service
+  selector:
+    job-name: {{ include "recipe-job.fullname" . }}
