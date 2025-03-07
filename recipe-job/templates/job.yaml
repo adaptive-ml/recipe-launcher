@@ -26,13 +26,49 @@ spec:
       serviceAccountName: {{ include "recipe-job.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: science-home
+          hostPath:
+            path: /mnt/fluidstack/nfs/home
+            type: Directory
+        - name: model-registry
+          hostPath:
+            path: /mnt/fluidstack/nfs/release-testing/model-registry
+            type: Directory
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          command: ["bash", "-c", "echo $JOB_COMPLETION_INDEX"]
+          command: ["/opt/adaptive/entrypoint_recipe_k8s_job.sh"]
+          volumeMounts:
+            - name: science-home
+              mountPath: /science_home
+            - name: model-registry
+              mountPath: /model-registry
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: IMAGE_TAG
+              value: {{ .Values.image.tag | quote }}
+            - name: GPU_COUNT
+              value: "1"
+            - name: WORLD_SIZE
+              value: "{{ .Values.harmony.gpusCount  }}"
+            # - name: MASTER_ADDR
+            #   value: "{{ include "adaptive.harmony.fullname" . }}-0.{{ include "adaptive.harmony.headlessService.fullname" . }}"
+            - name: MASTER_PORT
+              value: "7777"
+            - name: QUEUE_PORT
+              value: "50052"
+            - name: ADAPTIVE_LOGGING_LEVEL
+              value: info
+            - name: ADAPTIVE_MODE
+              value: PROD
+            - name: ADAPTIVE_RECIPE_JOB__CONFIG_PATH
+              value:  /science_home/{{ .Values.scientist }}/{{ .Values.recipeFile }}
+            - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
+              value: /science_home/{{ .Values.scientist }}/adaptive
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
