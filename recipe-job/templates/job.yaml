@@ -33,7 +33,7 @@ spec:
             type: Directory
         - name: model-registry
           hostPath:
-            path: /mnt/fluidstack/nfs/release-testing/model-registry
+            path: {{ .Values.modelRegistryPath }}
             type: Directory
       containers:
         - name: {{ .Chart.Name }}
@@ -53,9 +53,9 @@ spec:
             - name: GPU_COUNT
               value: "1"
             - name: WORLD_SIZE
-              value: "{{ .Values.harmony.gpusCount  }}"
-            # - name: MASTER_ADDR
-            #   value: "{{ include "adaptive.harmony.fullname" . }}-0.{{ include "adaptive.harmony.headlessService.fullname" . }}"
+              value: "{{ .Values.gpusCount  }}"
+            - name: MASTER_ADDR
+              value: "{{ include "recipe-job.fullname" . }}-0.{{ include "recipe-job.fullname" . }}"
             - name: MASTER_PORT
               value: "7777"
             - name: QUEUE_PORT
@@ -68,6 +68,8 @@ spec:
               value:  /science_home/{{ .Values.scientist }}/{{ .Values.recipeFile }}
             - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
               value: /science_home/{{ .Values.scientist }}/adaptive
+            - name: USE_REPLAY_BUFFER
+              value: "1"
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
