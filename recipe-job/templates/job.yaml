@@ -63,6 +63,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            # Huggingface token
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hf-token-secret
+                  key: token
             - name: IMAGE_TAG
               value: {{ .Values.image.tag | quote }}
             - name: GPU_COUNT
