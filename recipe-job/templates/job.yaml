@@ -5,8 +5,8 @@ metadata:
   labels:
     {{- include "recipe-job.labels" . | nindent 4 }}
 spec:
-  completions: {{ .Values.gpusCount }}  # 1 gpu for master + (n-1 for workers)
-  parallelism: {{ .Values.gpusCount }}  # Run all pods at the same time
+  completions: {{ .Values.replicasCount }}  # 1 gpu for master + (n-1 for workers)
+  parallelism: {{ .Values.replicasCount }}  # Run all pods at the same time
   completionMode: Indexed  # Ensures each pod is tracked separately (pod index == worker Rank)
   template:
     metadata:
@@ -19,6 +19,16 @@ spec:
     spec:
       subdomain: {{ include "recipe-job.fullname" . }}
       restartPolicy: Never
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - {{ include "recipe-job.name" . }}
+              topologyKey: kubernetes.io/hostname
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -40,6 +50,11 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           command: ["/opt/adaptive/entrypoint_recipe_k8s_job.sh"]
+          resources:
+            limits:
+              nvidia.com/gpu: {{ .Values.gpusPerReplica | default 1 }}
+            requests:
+              nvidia.com/gpu: {{ .Values.gpusPerReplica | default 1 }}
           volumeMounts:
             - name: science-home
               mountPath: /science_home
@@ -51,9 +66,9 @@ spec:
             - name: IMAGE_TAG
               value: {{ .Values.image.tag | quote }}
             - name: GPU_COUNT
-              value: "1"
+              value: {{ .Values.gpusPerReplica | default 1 | quote }}
             - name: WORLD_SIZE
-              value: "{{ .Values.gpusCount  }}"
+              value: "{{ mul (int .Values.replicasCount) (int .Values.gpusPerReplica) | default .Values.replicaCount }}"
             - name: MASTER_ADDR
               value: "{{ include "recipe-job.fullname" . }}-0.{{ include "recipe-job.fullname" . }}"
             - name: MASTER_PORT
@@ -65,11 +80,13 @@ spec:
             - name: ADAPTIVE_MODE
               value: PROD
             - name: ADAPTIVE_RECIPE_JOB__CONFIG_PATH
-              value:  /science_home/{{ .Values.scientist }}/{{ .Values.recipeFile }}
+              value: /opt/adaptive/lib/adaptive/adaptive/{{ .Values.recipeFile }}
             - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
               value: /science_home/{{ .Values.scientist }}/adaptive
             - name: USE_REPLAY_BUFFER
               value: "1"
+            - name: HARMONY_SETTING_MODEL_REGISTRY_ROOT
+              value: /model-registry
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

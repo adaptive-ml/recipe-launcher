@@ -2,16 +2,18 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-gpusCount: 2
+replicasCount: 2
+gpusPerReplica: 1
+
 recipeFile: "test_recipe.json"
 scientist: "laetitia"
-modelRegistryPath: "/mnt/fluidstack/nfs/release-testing/model-registry"
+modelRegistryPath: "/mnt/fluidstack/nfs/home/laetitia/model_registry"
 
 image:
   repository: 245375281689.dkr.ecr.us-west-2.amazonaws.com/adaptive/harmony
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "recipe-job"
+  tag: "recipe-job-2"
 
 imagePullSecrets:
   - name: adaptive-dev-ecr-registry-secret
@@ -37,18 +39,6 @@ podSecurityContext: {}
 securityContext:
   runAsUser: 0  # Run as root
   runAsGroup: 0  # Optional: Run as root group
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
 nodeSelector: {}
 
