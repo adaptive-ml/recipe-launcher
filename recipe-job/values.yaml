@@ -13,7 +13,7 @@ image:
   repository: 245375281689.dkr.ecr.us-west-2.amazonaws.com/adaptive/harmony
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "recipe-job-2"
+  tag: "sha-208655c"
 
 imagePullSecrets:
   - name: adaptive-dev-ecr-registry-secret

@@ -60,3 +60,19 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Generates comma-separated list of worker processes dns names for each replica
+*/}}
+{{- define "workersHostnames" -}}
+  {{- $name := include "recipe-job.fullname" . -}}
+  {{- $list := list -}}
+  {{- range $i := until (int .Values.replicasCount) -}}
+    {{- if ne $i 0 -}}
+      {{- $entry := printf "%s-%d.%s" $name $i $name -}}
+      {{- $list = append $list $entry -}}
+    {{- end -}}
+  {{- end -}}
+  {{- join "," $list -}}
+{{- end -}}

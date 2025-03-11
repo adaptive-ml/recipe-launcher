@@ -81,6 +81,8 @@ spec:
               value: "7777"
             - name: QUEUE_PORT
               value: "50052"
+            - name: WORKERS_HOSTS
+              value: {{ include "workersHostnames" . | quote }}
             - name: ADAPTIVE_LOGGING_LEVEL
               value: info
             - name: ADAPTIVE_MODE
