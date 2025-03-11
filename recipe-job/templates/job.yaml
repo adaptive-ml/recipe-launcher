@@ -95,6 +95,8 @@ spec:
               value: "1"
             - name: HARMONY_SETTING_MODEL_REGISTRY_ROOT
               value: /model-registry
+            - name: AWAIT_NON_MASTER_WORKERS
+              value: "0"
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
