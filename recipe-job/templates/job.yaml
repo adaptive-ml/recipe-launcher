@@ -37,14 +37,15 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-        - name: science-home
+        - name: science-repo
           hostPath:
-            path: /mnt/fluidstack/nfs/home
+            path: /mnt/fluidstack/nfs/home/{{ .Values.scientist }}/adaptive/src/adaptive
             type: Directory
         - name: model-registry
           hostPath:
             path: {{ .Values.modelRegistryPath }}
             type: Directory
+
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -56,8 +57,8 @@ spec:
             requests:
               nvidia.com/gpu: {{ .Values.gpusPerReplica | default 1 }}
           volumeMounts:
-            - name: science-home
-              mountPath: /science_home
+            - name: science-repo
+              mountPath: /opt/adaptive/lib/adaptive/adaptive
             - name: model-registry
               mountPath: /model-registry
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -89,14 +90,14 @@ spec:
               value: PROD
             - name: ADAPTIVE_RECIPE_JOB__CONFIG_PATH
               value: /opt/adaptive/lib/adaptive/adaptive/{{ .Values.recipeFile }}
-            - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
-              value: /science_home/{{ .Values.scientist }}/adaptive
             - name: USE_REPLAY_BUFFER
               value: "1"
             - name: HARMONY_SETTING_MODEL_REGISTRY_ROOT
               value: /model-registry
             - name: AWAIT_NON_MASTER_WORKERS
-              value: "0"
+              value: "1"
+            - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
+              value: dummy
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
