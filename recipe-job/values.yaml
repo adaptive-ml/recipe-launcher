@@ -3,17 +3,17 @@
 # Declare variables to be passed into your templates.
 
 replicasCount: 2
-gpusPerReplica: 1
+gpusPerReplica: 8
 
-recipeFile: "test_recipe.json"
+recipeFile: "test_recipe_2.json"
 scientist: "laetitia"
-modelRegistryPath: "/mnt/fluidstack/nfs/home/laetitia/model_registry"
+modelRegistryPath: "/mnt/fluidstack/nfs/adaptive/model_registry"
 
 image:
   repository: 245375281689.dkr.ecr.us-west-2.amazonaws.com/adaptive/harmony
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "sha-9fd7810"
+  tag: "sha-e6b5567"
 
 imagePullSecrets:
   - name: adaptive-dev-ecr-registry-secret

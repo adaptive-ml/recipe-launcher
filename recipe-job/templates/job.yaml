@@ -85,7 +85,9 @@ spec:
             - name: WORKERS_HOSTS
               value: {{ include "workersHostnames" . | quote }}
             - name: ADAPTIVE_LOGGING_LEVEL
-              value: info
+              value: {{ .Values.loggingLevel | default "INFO" }}
+            - name: HARMONY_SETTING_LOGGING_LEVEL
+              value: {{ .Values.loggingLevel | default "INFO" }}
             - name: ADAPTIVE_MODE
               value: PROD
             - name: ADAPTIVE_RECIPE_JOB__CONFIG_PATH
@@ -95,7 +97,7 @@ spec:
             - name: HARMONY_SETTING_MODEL_REGISTRY_ROOT
               value: /model-registry
             - name: AWAIT_NON_MASTER_WORKERS
-              value: "1"
+              value: "0"
             - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
               value: dummy
 
