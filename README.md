@@ -1,13 +1,15 @@
 # recipe-lancher
-Tool for launching recipes in kubernetes
 
+Tool for launching recipes using Adaptive Engine in kubernetes.
 
+## Launch a recipe on FS
 
-### Launch a recipe
+First make the script executable for convenience: `chmod +x run_recipe.py`
 
+Usage: `./run_recipe.py --help`
+
+Example:
+
+```python
+./run_recipe.py --job-name=demo --user-name=laetitia --recipe-file=test_recipe_2.json
 ```
-
-(helm delete yacine || true) &&  helm install yacine ./recipe-job --values image.tag="reference_harmony_image_tag"  --namespace recipe-jobs
-
-```
-``

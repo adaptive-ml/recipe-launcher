@@ -39,7 +39,7 @@ spec:
       volumes:
         - name: science-repo
           hostPath:
-            path: /mnt/fluidstack/nfs/home/{{ .Values.scientist }}/adaptive/src/adaptive
+            path: /mnt/fluidstack/nfs/home/{{ .Values.userName }}/adaptive/src/adaptive
             type: Directory
         - name: model-registry
           hostPath:
