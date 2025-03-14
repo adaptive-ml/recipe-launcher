@@ -45,7 +45,11 @@ spec:
           hostPath:
             path: {{ .Values.modelRegistryPath }}
             type: Directory
-
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 8Gi
+            
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -61,6 +65,9 @@ spec:
               mountPath: /opt/adaptive/lib/adaptive/adaptive
             - name: model-registry
               mountPath: /model-registry
+            # needed for nccl to work properly
+            - name: dshm
+              mountPath: /dev/shm
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
