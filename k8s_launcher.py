@@ -16,11 +16,12 @@ def cancel_job(job_name, namespace="default"):
     except subprocess.CalledProcessError as e:
         print("Error deleting Helm release:", e.stderr)
 
-def run_recipe_job(job_name, harmony_version, user_name, recipe_file, model_registry_path, nodes_number, namespace="default"):
+def run_recipe_job(job_name, harmony_version, user_name, recipe_file, model_registry_path, nodes_number, wandb_api_key, namespace="default"):
     command = ["helm", "install", job_name, "./charts/recipe-job"]
 
     # overrides
-    command.extend(["--set", f"image.tag={harmony_version},userName={user_name},recipeFile={recipe_file},modelRegistryPath={model_registry_path},replicasCount={nodes_number}"])
+    wandb_api_key = wandb_api_key or ""
+    command.extend(["--set", f"image.tag={harmony_version},userName={user_name},recipeFile={recipe_file},modelRegistryPath={model_registry_path},replicasCount={nodes_number},wandbApiKey={wandb_api_key}"])
 
     if namespace:
         command.extend(["--namespace", namespace])
@@ -77,5 +78,6 @@ if __name__ == "__main__":
             user_name=args.user_name,
             recipe_file=args.recipe_file,
             model_registry_path=args.model_registry_path,
-            nodes_number=args.nodes_number
+            nodes_number=args.nodes_number,
+            wandb_api_key=args.wandb_api_key
         )

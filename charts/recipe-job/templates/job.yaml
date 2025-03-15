@@ -105,8 +105,8 @@ spec:
               value: /model-registry
             - name: AWAIT_NON_MASTER_WORKERS
               value: "0"
-            - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
-              value: dummy
+            - name: WANDB_API_KEY
+              value: {{ .Values.wandbApiKey | default "" | quote }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

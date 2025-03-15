@@ -4,16 +4,16 @@ Tool for launching recipes using Adaptive Engine in kubernetes.
 
 ## Launch a recipe on FS
 
-First make the script executable for convenience: `chmod +x run_recipe.py`
+First make the script executable for convenience: `chmod +x k8s_launcher.py`
 
-**Usage**: `./run_recipe.py --help`
+**Usage**: `./k8s_launcher.py --help`
 
 **Example**:
 
 ```python
-./run_recipe.py --job-name=fancyjob --user-name=laetitia --recipe-file=test_recipe_2.json --wandb-api-key wand_api_key --nodes-number 4
+./k8s_launcher.py --job-name=fancyjob --user-name=laetitia --recipe-file=test_recipe_2.json --wandb-api-key wand_api_key --nodes-number 4
 ```
 
 ## Cancel a job
 
-`./run_recipe.py --cancel --job-name your_job_name`
+`./k8s_launcher.py --cancel --job-name your_job_name`
