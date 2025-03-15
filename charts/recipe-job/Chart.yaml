@@ -1,11 +1,12 @@
 ---
 apiVersion: v2
 name: recipe-job
-version: 0.1.0
+version: 0.1.1
 appVersion: 0.1.0
 description: A Helm chart which provide a DRY job for running adaptive recipes for science
 keywords:
   - job
   - recipe
+  - adaptive
 maintainers:
   - name: yacineb

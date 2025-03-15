@@ -4,6 +4,12 @@ import webbrowser
 import argparse
 import re
 
+def prepare_helm():
+    command = ["helm", "repo", "add", "adaptive-launchers", "https://adaptive-ml.github.io/recipe-launcher/"]
+    subprocess.run(command, check=True, capture_output=True, text=True)
+    command = ["helm", "repo", "update", "adaptive-launchers"]
+    subprocess.run(command, check=True, capture_output=True, text=True)
+
 def get_logs_url(k8s_job):
     return f"https://preprod.tech-adaptive-ml.com/monitoring/explore?schemaVersion=1&panes=%7B%22lo2%22:%7B%22datasource%22:%22P8E80F9AEF21F6940%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bjob_name%3D%5C%22{k8s_job}%5C%22%7D%20%7C%3D%20%60%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22P8E80F9AEF21F6940%22%7D,%22editorMode%22:%22builder%22,%22direction%22:%22forward%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1"
 
@@ -11,13 +17,14 @@ def cancel_job(job_name, namespace="default"):
     command = ["helm", "delete", job_name, "--ignore-not-found"]
     if namespace:
         command.extend(["--namespace", namespace])
-    try:
-        subprocess.run(command, check=True, capture_output=True, text=True)
-    except subprocess.CalledProcessError as e:
-        print("Error deleting Helm release:", e.stderr)
+    subprocess.run(command, check=True, capture_output=True, text=True)
 
 def run_recipe_job(job_name, harmony_version, user_name, recipe_file, model_registry_path, nodes_number, wandb_api_key, namespace="default"):
-    command = ["helm", "install", job_name, "./charts/recipe-job"]
+    print(f"🚀 Creating job '{job_name}'")
+
+    prepare_helm()
+
+    command = ["helm", "install", job_name, "adaptive-launchers/recipe-job"]
 
     # overrides
     wandb_api_key = wandb_api_key or ""
@@ -28,7 +35,6 @@ def run_recipe_job(job_name, harmony_version, user_name, recipe_file, model_regi
     
     k8s_job = f"{job_name}-recipe-job"
 
-    print(f"🚀 Creating job '{job_name}'")
     subprocess.run(command, check=True, capture_output=True, text=True)
 
     logs_url= get_logs_url(k8s_job)
