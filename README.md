@@ -17,3 +17,8 @@ First make the script executable for convenience: `chmod +x k8s_launcher.py`
 ## Cancel a job
 
 `./k8s_launcher.py --cancel --job-name your_job_name`
+
+## Current limitations
+
+- No advanced queue features, no guarantee of fairness.
+- Requires building a new image if dependencies (either pip, or binaries) need to be changed.
