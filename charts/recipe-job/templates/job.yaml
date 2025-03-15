@@ -39,13 +39,17 @@ spec:
       volumes:
         - name: science-repo
           hostPath:
-            path: /mnt/fluidstack/nfs/home/{{ .Values.scientist }}/adaptive/src/adaptive
+            path: /mnt/fluidstack/nfs/home/{{ .Values.userName }}/adaptive/src/adaptive
             type: Directory
         - name: model-registry
           hostPath:
             path: {{ .Values.modelRegistryPath }}
             type: Directory
-
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 8Gi
+            
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -61,6 +65,9 @@ spec:
               mountPath: /opt/adaptive/lib/adaptive/adaptive
             - name: model-registry
               mountPath: /model-registry
+            # needed for nccl to work properly
+            - name: dshm
+              mountPath: /dev/shm
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
@@ -85,7 +92,9 @@ spec:
             - name: WORKERS_HOSTS
               value: {{ include "workersHostnames" . | quote }}
             - name: ADAPTIVE_LOGGING_LEVEL
-              value: info
+              value: {{ .Values.loggingLevel | default "INFO" }}
+            - name: HARMONY_SETTING_LOGGING_LEVEL
+              value: {{ .Values.loggingLevel | default "INFO" }}
             - name: ADAPTIVE_MODE
               value: PROD
             - name: ADAPTIVE_RECIPE_JOB__CONFIG_PATH
@@ -95,9 +104,9 @@ spec:
             - name: HARMONY_SETTING_MODEL_REGISTRY_ROOT
               value: /model-registry
             - name: AWAIT_NON_MASTER_WORKERS
-              value: "1"
-            - name: ADAPTIVE_RECIPE_JOB__SCIENCE_REPO_PATH
-              value: dummy
+              value: "0"
+            - name: WANDB_API_KEY
+              value: {{ .Values.wandbApiKey | default "" | quote }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
