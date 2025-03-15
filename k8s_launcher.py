@@ -3,6 +3,7 @@ import subprocess
 import webbrowser
 import argparse
 import re
+import platform
 
 def prepare_helm():
     command = ["helm", "repo", "add", "adaptive-launchers", "https://adaptive-ml.github.io/recipe-launcher/"]
@@ -44,7 +45,8 @@ def run_recipe_job(job_name, harmony_version, user_name, recipe_file, model_regi
 
     print(f"Job logs at: {logs_url}")
 
-    webbrowser.open_new_tab(logs_url)
+    if platform.system() == "Darwin":
+        webbrowser.open_new_tab(logs_url)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Recipe k8s launcher")
