@@ -3,6 +3,22 @@ entries:
   recipe-job:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-03-25T15:42:59.331136937Z"
+    description: A Helm chart which provide a DRY job for running adaptive recipes
+      for science
+    digest: d18817fab747c56590038dca49f140ec7e13323fbb42173be66fa4817eb4e5d2
+    keywords:
+    - job
+    - recipe
+    - adaptive
+    maintainers:
+    - name: yacineb
+    name: recipe-job
+    urls:
+    - https://github.com/adaptive-ml/recipe-launcher/releases/download/recipe-job-0.2.0/recipe-job-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-03-15T09:49:16.649733097Z"
     description: A Helm chart which provide a DRY job for running adaptive recipes
       for science
@@ -32,4 +48,4 @@ entries:
     urls:
     - https://github.com/adaptive-ml/recipe-launcher/releases/download/recipe-job-0.1.0/recipe-job-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-15T09:49:16.649740962Z"
+generated: "2025-03-25T15:42:59.331154229Z"
