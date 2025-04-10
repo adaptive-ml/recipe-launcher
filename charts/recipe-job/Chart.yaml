@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 name: recipe-job
-version: 0.2.0
+version: 0.3.0
 appVersion: 0.1.0
 description: A Helm chart which provide a DRY job for running adaptive recipes for science
 keywords:
