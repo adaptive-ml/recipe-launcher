@@ -9,6 +9,9 @@ recipeFile: "the_recipe_to_run.json"
 userName: "johnsmith"
 modelRegistryPath: "path_to_adaptive_model_registry"
 
+# home dir mount on nodes host paths, or nfs
+homeDir: /mnt/fluidstack/nfs/home
+
 image:
   repository: 245375281689.dkr.ecr.us-west-2.amazonaws.com/adaptive/harmony
   pullPolicy: IfNotPresent

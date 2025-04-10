@@ -1,6 +1,6 @@
 # recipe-lancher
 
-Tool for launching recipes using Adaptive Engine in kubernetes.
+Tool for launching training recipes using Adaptive Engine in kubernetes on multiple nodes.
 
 ## Launch a recipe on FS
 
@@ -22,3 +22,18 @@ First make the script executable for convenience: `chmod +x k8s_launcher.py`
 
 - No advanced queue features, no guarantee of fairness.
 - Requires building a new image if dependencies (either pip, or binaries) need to be changed.
+
+
+## Run using docker (single node)
+
+`docker-launch.sh` script is a simpler version for runner training on a gpu host.
+
+you'll need to set environment variables below:
+
+- `adaptive_image_repo`: the image image repository
+- `adaptive_image_tag`: harmony image tag
+- `local_model_registry_path`: the adaptive model registry path.
+- `local_recipe_file_json`: the serialized recipe configuration
+
+
+For additional options/overrides on harmony settings, you can get in touch with adaptive support.

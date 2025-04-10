@@ -39,7 +39,7 @@ spec:
       volumes:
         - name: science-repo
           hostPath:
-            path: /mnt/fluidstack/nfs/home/{{ .Values.userName }}/adaptive/src/adaptive
+            path: "{{ .Values.homeDir }}/{{ .Values.userName }}/adaptive/src/adaptive"
             type: Directory
         - name: model-registry
           hostPath:
@@ -89,8 +89,6 @@ spec:
               value: "7777"
             - name: QUEUE_PORT
               value: "50052"
-            - name: WORKERS_HOSTS
-              value: "deprecated"
             - name: ADAPTIVE_LOGGING_LEVEL
               value: {{ .Values.loggingLevel | default "INFO" }}
             - name: HARMONY_SETTING_LOGGING_LEVEL
@@ -103,8 +101,6 @@ spec:
               value: "1"
             - name: HARMONY_SETTING_MODEL_REGISTRY_ROOT
               value: /model-registry
-            - name: AWAIT_NON_MASTER_WORKERS
-              value: "0"
             - name: WANDB_API_KEY
               value: {{ .Values.wandbApiKey | default "" | quote }}
 
