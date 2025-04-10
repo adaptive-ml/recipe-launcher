@@ -4,6 +4,7 @@ GPU_COUNT=$(nvidia-smi --list-gpus | wc -l)
 docker pull ${adaptive_image_repo}:${adaptive_image_tag}
 
 docker run --rm \
+  -d \
   --gpus all \
   --shm-size=8g \
   -v ${local_recipe_file_json}:/opt/adaptive/lib/adaptive/adaptive/recipe.json \
@@ -22,6 +23,7 @@ docker run --rm \
   --entrypoint /opt/adaptive/entrypoint_recipe_k8s_job.sh \
   ${adaptive_image_repo}:${adaptive_image_tag} 
 
+echo "Job was launched, check docker logs"
 
 
 
