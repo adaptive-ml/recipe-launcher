@@ -26,16 +26,17 @@ First make the script executable for convenience: `chmod +x k8s_launcher.py`
 
 ## Run using docker (single node)
 
-Requires a node with GPS with docker installed, x86_64 arch.
+Requires a GPU node with docker installed, x86_64 architecture.
 
-`docker-launch.sh` script is a simpler version for runner training on a gpu host.
+`docker-launch.sh` script is a simpler version to launch training jobs on a gpu host.
 
-you'll need to set environment variables below:
+You'll need to set environment variables below:
 
-- `adaptive_image_repo`: the harmony image repository
+- `adaptive_image_repo`: harmony image repository
 - `adaptive_image_tag`: harmony image tag
-- `local_model_registry_path`: the adaptive model registry path.
-- `local_recipe_file_json`: the serialized recipe configuration
+- `local_model_registry_path`: local adaptive model registry path
+- `local_recipe_file_json`: the local JSON-serialized recipe configuration
+- `data_dir`: the local directory where you save training/evaluation data files
 
 
 For additional options/overrides on harmony settings, you can get in touch with adaptive support.
