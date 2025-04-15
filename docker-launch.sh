@@ -17,10 +17,6 @@ if [ -z $data_dir ]; then
     echo "Input data directory envvar data_dir was not set"
     exit 1
 fi
-if [ -z $local_shared_directory ]; then
-    echo "Shared directory envvar local_shared_directory was not set"
-    exit 1
-fi
 if [ -z $adaptive_image_repo ]; then
     echo "Image repo envvar adaptive_image_repo was not set"
     exit 1
@@ -50,8 +46,8 @@ done
 docker pull ${adaptive_image_repo}:${adaptive_image_tag}
 
 # make directories if they do not exist
-mkdir -p ${local_model_registry_path} ${data_dir} ${local_shared_directory}
-sudo chmod -R 777 ${local_model_registry_path} ${training_data_dir} ${local_shared_directory}
+mkdir -p ${local_model_registry_path} ${data_dir} ./shared
+sudo chmod -R 777 ${local_model_registry_path} ${training_data_dir} ./shared
 
 docker run ${DOCKER_RUN_FLAGS} \
   --rm \
@@ -60,7 +56,7 @@ docker run ${DOCKER_RUN_FLAGS} \
   -v ${local_recipe_file_json}:/opt/adaptive/lib/adaptive/adaptive/recipe.json \
   -v ${local_model_registry_path}:/model_registry \
   -v ${data_dir}:/data \
-  -v ${local_shared_directory}:/opt/adaptive/shared_folder \
+  -v ./shared:/opt/adaptive/shared_folder \
   -e GPU_COUNT=${GPU_COUNT} \
   -e WORLD_SIZE=${GPU_COUNT} \
   -e ADAPTIVE_LOGGING_LEVEL=INFO \
