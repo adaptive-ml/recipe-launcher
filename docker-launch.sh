@@ -47,7 +47,7 @@ docker pull ${adaptive_image_repo}:${adaptive_image_tag}
 
 # make directories if they do not exist
 mkdir -p ${local_model_registry_path} ${data_dir} ./shared
-sudo chmod -R 777 ${local_model_registry_path} ${training_data_dir} ./shared
+sudo chmod -R 777 ${local_model_registry_path} ${data_dir} ./shared
 
 docker run ${DOCKER_RUN_FLAGS} \
   --rm \
