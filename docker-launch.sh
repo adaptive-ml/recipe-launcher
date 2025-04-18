@@ -57,16 +57,17 @@ docker run ${DOCKER_RUN_FLAGS} \
   -v ${local_model_registry_path}:/model_registry \
   -v ${data_dir}:/data \
   -v ./shared:/opt/adaptive/shared_folder \
+  -e HARMONY_SETTING_WORKING_DIR=/opt/adaptive/shared_folder \
+  -e HARMONY_SETTING_MODEL_REGISTRY_ROOT=/model_registry \
+  -e ADAPTIVE_RECIPE_JOB__CONFIG_PATH=/opt/adaptive/lib/adaptive/adaptive/recipe.json \
   -e GPU_COUNT=${GPU_COUNT} \
   -e WORLD_SIZE=${GPU_COUNT} \
   -e ADAPTIVE_LOGGING_LEVEL=INFO \
   -e HARMONY_SETTING_LOGGING_LEVEL=INFO \
   -e ADAPTIVE_MODE=PROD \
-  -e ADAPTIVE_RECIPE_JOB__CONFIG_PATH=/opt/adaptive/lib/adaptive/adaptive/recipe.json \
   -e USE_REPLAY_BUFFER=1 \
   -e JOB_COMPLETION_INDEX=0 \
   -e MASTER_ADDR=localhost \
-  -e HARMONY_SETTING_MODEL_REGISTRY_ROOT=/model_registry \
   --entrypoint /opt/adaptive/entrypoint_recipe_k8s_job.sh \
   ${adaptive_image_repo}:${adaptive_image_tag} 
 
